@@ -1,36 +1,32 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Supershape from "../../components/art/SuperShape";
-import { SwatchesPicker } from "react-color";
+import Lorentz from "../../components/art/LorentzAttractor";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
 import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import { SwatchesPicker } from "react-color";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
 export default function Rdraw() {
-  const [increment2d, setincrement2d] = useState(3);
-  const [bold2d, setbold2d] = useState(3);
-  const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 25, g: 194, b: 209 },
-  });
+  const [increment2d, setincrement2d] = useState(60);
+  const [sizef, setsizef] = useState(60);
   const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 255, g: 194, b: 209 },
+    rgb: { r: 0, g: 0, b: 0 },
   });
 
   const handleincrement2d = (e) => {
     setincrement2d(e.target.value);
   };
-  const handlebold2d = (e) => {
-    setbold2d(e.target.value);
+
+  const handlesizef = (e) => {
+    setsizef(e.target.value);
   };
-  const handlebordercolor = (color) => {
-    setbordercolor(color);
-  };
+
   const handlebackgroundcolor = (color) => {
     setbackgroundcolor(color);
   };
@@ -39,10 +35,9 @@ export default function Rdraw() {
   const save = async () => {
     let data = {
       increment2d,
-      bold2d,
-      bordercolor: { rgb: bordercolor.rgb },
+      sizef,
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 16,
+      id: 3,
       resolution,
     };
     try {
@@ -58,7 +53,7 @@ export default function Rdraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">SUPERSHAPE</h1>
+        <h1 className="header-title">Lorentz Attractor</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -66,22 +61,21 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              Supershape simulates amazing shapes in a two-dimensional plane
-              using a visual representation of a certain type of parametric
-              equation. In accordance with a specific value of u, we simulated a
-              supershape. The fundamental concept is that we operate with a
-              function that receives an angle and returns a value, and we do
-              this for each circle. We get the shape altering on the fly by
-              employing a variety of functions. With the help of the backdrop
-              and border colors, we may change the supershape's boldness and
-              size.
+              Edward Lorentz discovered the Lorentz attractor, a 3D work of art,
+              while researching the atmosphere. There are ordinary differential
+              equations in it. We obtain the image on the canvas using the
+              variables x, y, and z. The first point in the Lorenz attractor is
+              arbitrary located, but the second point is determined by observing
+              the first. This attractor never travels to the same spot twice and
+              changes location at random. We have the ability to modify the
+              attractor's size, speed, and backdrop color.
             </span>
           </nav>
           <div className="main-art">
-            <Supershape
+            <Lorentz
               increment={increment2d}
-              bold={bold2d}
-              border={bordercolor}
+              size={sizef}
+              // border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
             />
@@ -122,41 +116,34 @@ export default function Rdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>Increment</h5>
+              <h5>Speed Increment</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                0
+                40
                 <PrettoSlider
-                  min={0}
-                  max={10}
+                  min={40}
+                  max={100}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
                   value={increment2d}
                   onChange={handleincrement2d}
                 />
-                10
+                100
               </Stack>
             </div>
             <div className="slider1">
-              <h5>BOLDNESS OF BORDER</h5>
+              <h5>Size</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                0
+                50
                 <PrettoSlider
-                  min={0}
-                  max={5}
+                  min={50}
+                  max={90}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={bold2d}
-                  onChange={handlebold2d}
+                  value={sizef}
+                  onChange={handlesizef}
                 />
-                5
+                90
               </Stack>
-            </div>
-            <div className="colorpicker">
-              <h5>Border Color</h5>
-              <SwatchesPicker
-                color={bordercolor.rgb}
-                onChangeComplete={handlebordercolor}
-              />
             </div>
             <div className="colorpicker">
               <h5>Background Color</h5>
@@ -171,7 +158,7 @@ export default function Rdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/supershape2d`
+            `https://suwubham.github.io/template/lorentzattractor`
           );
           alert("Copied to clipboard");
         }}

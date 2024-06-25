@@ -1,40 +1,49 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Recursivetree from "../../components/art/RecursiveTree";
-import { SketchPicker } from "react-color";
-import { CirclePicker } from "react-color";
+import Mandala from "../../components/art/Mandala";
+import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
 import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
-import Menu from "../../components/ArtMenu";
 import saveService from "../../services/save.service";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import Menu from "../../components/ArtMenu";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Tree() {
-  const [branchlength, setbranchlength] = useState(65);
-  const [leafcolor, setleafcolor] = useState({
-    rgb: { r: 191, g: 63, b: 63 },
+export default function Rdraw() {
+  const [alpha, setalpha] = useState(200);
+  const [boldness, setboldness] = useState(0);
+  const [bordercolor, setbordercolor] = useState({
+    rgb: { r: 25, g: 194, b: 209 },
   });
-
-  const [trunkcolor, settrunkcolor] = useState({
-    rgb: { r: 51, g: 51, b: 51 },
-  });
-
   const [backgroundcolor, setbackgroundcolor] = useState({
     rgb: { r: 255, g: 194, b: 209 },
   });
+
+  const handlealpha = (e) => {
+    setalpha(e.target.value);
+  };
+  const handleboldness = (e) => {
+    setboldness(e.target.value);
+  };
+  const handlebordercolor = (color) => {
+    setbordercolor(color);
+  };
+  const handlebackgroundcolor = (color) => {
+    setbackgroundcolor(color);
+  };
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
+
   const save = async () => {
     let data = {
-      branchlength,
-      leafcolor,
+      alpha,
+      boldness,
+      bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      trunkcolor: { rgb: trunkcolor.rgb },
+      id: 11,
       resolution,
-      id: 5,
     };
     try {
       await saveService.save(data).then((res) => {
@@ -49,7 +58,7 @@ export default function Tree() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Recursive Tree</h1>
+        <h1 className="header-title">Mandala</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -57,16 +66,20 @@ export default function Tree() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              Recursion is a self-referential concept. Recursion is powerful tool for creating detailed, 
-              complex patterns with code. Recursion occurs when a function definition includes the use of 
-              the function itself.
+              Because of random variables, every time we hit an editor, a new
+              design mandala appears that has never existed before or will never
+              appear again. The art becomes transparent when alpha is reduced
+              all the way, yet it remains opaque when alpha is increased. To
+              make the art pop a little bit more, we can also lengthen and
+              shorten the mandala's stroke lines. We can even alter the
+              mandala's border and background colors.
             </span>
           </nav>
           <div className="main-art">
-            <Recursivetree
-              branch={branchlength}
-              leaf={leafcolor}
-              trunk={trunkcolor}
+            <Mandala
+              alph={alpha}
+              bold={boldness}
+              border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
             />
@@ -106,52 +119,48 @@ export default function Tree() {
                 />
               </div>
             </div>
-            <div className="branch">
-              <h5>Branch Length</h5>
+            <div className="slider1">
+              <h5>Alpha Value</h5>
+              <Stack direction="row" alignItems="center" className="slider">
+                50
+                <PrettoSlider
+                  min={50}
+                  max={250}
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  value={alpha}
+                  onChange={handlealpha}
+                />
+                250
+              </Stack>
+            </div>
+            <div className="slider1">
+              <h5>StrokeWeight Of Border</h5>
               <Stack direction="row" alignItems="center" className="slider">
                 0
                 <PrettoSlider
                   min={0}
-                  max={120}
+                  max={2}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  defaultValue={branchlength}
-                  onChange={(e) => {
-                    setbranchlength(e.target.value);
-                  }}
+                  value={boldness}
+                  onChange={handleboldness}
                 />
-                120
+                2
               </Stack>
             </div>
-            <div className="editrow1">
-              <div className="leafcolor">
-                <h5>Leaf color</h5>
-                <SketchPicker
-                  color={leafcolor.rgb}
-                  onChangeComplete={(color) => {
-                    setleafcolor(color);
-                  }}
-                />
-              </div>
-              <div className="backgroundcolor">
-                <h5>Background color</h5>
-                <SketchPicker
-                  color={backgroundcolor.rgb}
-                  onChangeComplete={(color) => {
-                    setbackgroundcolor(color);
-                  }}
-                  triangle={"hide"}
-                />
-              </div>
+            <div className="colorpicker">
+              <h5>Border Color</h5>
+              <SwatchesPicker
+                color={bordercolor.rgb}
+                onChangeComplete={handlebordercolor}
+              />
             </div>
-
-            <div className="trunkcolor">
-              <h5>Trunk color</h5>
-              <CirclePicker
-                color={trunkcolor.rgb}
-                onChangeComplete={(color) => {
-                  settrunkcolor(color);
-                }}
+            <div className="colorpicker">
+              <h5>Background Color</h5>
+              <SwatchesPicker
+                color={backgroundcolor.rgb}
+                onChangeComplete={handlebackgroundcolor}
               />
             </div>
           </div>
@@ -160,7 +169,7 @@ export default function Tree() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/recursivetree`
+            `https://suwubham.github.io/template/Mandala`
           );
           alert("Copied to clipboard");
         }}

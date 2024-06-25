@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Recursioncircle from "../../components/art/RecursionCircle";
+import Rotatedbox from "../../components/art/RotatedBox";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,12 +9,12 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Rdraw() {
+export default function Rbox() {
   const [increment2d, setincrement2d] = useState(25);
-  const [boldness, setboldness] = useState(90);
+  const [boldness, setboldness] = useState(2);
   const [bordercolor, setbordercolor] = useState({
     rgb: { r: 257, g: 16, b: 100 },
   });
@@ -42,7 +42,7 @@ export default function Rdraw() {
       boldness,
       bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 8,
+      id: 9,
       resolution,
     };
     try {
@@ -58,7 +58,7 @@ export default function Rdraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Recurssion Circle</h1>
+        <h1 className="header-title">Rotated Box</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -66,18 +66,16 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              The idea of recursion involves self-reference.A recursive function
-              is defined within itself. It is a simple method of generating an
-              art form, or a pattern. In a recursive circle, we start with a
-              single circle, and as the number of iterations rises, a new circle
-              is generated on it from three different angles. It is merely the
-              fundamental idea of recursion. We now have iteration and the
-              ability to increase and decrease the boldness of the border. We
-              can alter the background and border colors similarly.
+              The rectangles can also be turned around and positioned at a
+              45-degree angle. As a result of different types of rectangles
+              covering one another, an intriguing work of art results. We can
+              alter both the dominant and background colors. The line's stroke
+              and the rectangle's size can both be increased in a similar
+              manner.
             </span>
           </nav>
           <div className="main-art">
-            <Recursioncircle
+            <Rotatedbox
               increment={increment2d}
               bold={boldness}
               border={bordercolor}
@@ -121,37 +119,37 @@ export default function Rdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>No of iteration</h5>
+              <h5>Increment in Size</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                20
+                10
                 <PrettoSlider
-                  min={20}
-                  max={50}
+                  min={10}
+                  max={60}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
                   value={increment2d}
                   onChange={handleincrement2d}
                 />
-                50
+                60
               </Stack>
             </div>
             <div className="slider1">
               <h5>StrokeWeight of Border</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                50
+                1
                 <PrettoSlider
-                  min={50}
-                  max={150}
+                  min={1}
+                  max={5}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
                   value={boldness}
                   onChange={handleboldness}
                 />
-                150
+                5
               </Stack>
             </div>
             <div className="colorpicker">
-              <h5>Border Color</h5>
+              <h5>Dominant Color</h5>
               <SwatchesPicker
                 color={bordercolor.rgb}
                 onChangeComplete={handlebordercolor}
@@ -170,7 +168,7 @@ export default function Rdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/recursioncircle`
+            `https://suwubham.github.io/template/rotatedbox`
           );
           alert("Copied to clipboard");
         }}

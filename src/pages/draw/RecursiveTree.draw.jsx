@@ -1,41 +1,41 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import ASCIIFabric from "../../components/art/ASCIIFabric";
-import { PrettoSlider } from "../../styles/PrettoSlider";
-import { SwatchesPicker } from "react-color";
+import Recursivetree from "../../components/art/RecursiveTree";
+import { SketchPicker } from "react-color";
+import { CirclePicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
 import LoggedNavbar from "../../components/Navbar_logged";
-import saveService from "../../services/save.service";
+import { PrettoSlider } from "../../styles/PrettoSlider";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import saveService from "../../services/save.service";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Adraw() {
-  const [sizef, setsizef] = useState(30);
-
-  const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 0, g: 19, b: 20 },
+export default function Tree() {
+  const [branchlength, setbranchlength] = useState(65);
+  const [leafcolor, setleafcolor] = useState({
+    rgb: { r: 191, g: 63, b: 63 },
   });
 
-  const handlesizef = (e) => {
-    setsizef(e.target.value);
-  };
-  const handlebackgroundcolor = (color) => {
-    setbackgroundcolor(color);
-  };
+  const [trunkcolor, settrunkcolor] = useState({
+    rgb: { r: 51, g: 51, b: 51 },
+  });
 
+  const [backgroundcolor, setbackgroundcolor] = useState({
+    rgb: { r: 255, g: 194, b: 209 },
+  });
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
-
   const save = async () => {
     let data = {
-      sizef,
+      branchlength,
+      leafcolor,
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 14,
+      trunkcolor: { rgb: trunkcolor.rgb },
       resolution,
+      id: 5,
     };
-
     try {
       await saveService.save(data).then((res) => {
         console.log(res);
@@ -49,7 +49,7 @@ export default function Adraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">ASCII Fabric</h1>
+        <h1 className="header-title">Recursive Tree</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -57,22 +57,21 @@ export default function Adraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              Using a grid approach, ASCII fabric patterns are created. We have
-              utilized four different font styles , along with some ASCII
-              characters that we found on a website in a variety of forms.Here
-              we have used 176,177,178 and 219. We can alter the pattern's size
-              as well as the background color to suit our preferences. link of
-              the website https://www.asciitable.com/
+              Recursion is a self-referential concept. Recursion is powerful
+              tool for creating detailed, complex patterns with code. Recursion
+              occurs when a function definition includes the use of the function
+              itself.
             </span>
           </nav>
           <div className="main-art">
-            <ASCIIFabric
-              size={sizef}
+            <Recursivetree
+              branch={branchlength}
+              leaf={leafcolor}
+              trunk={trunkcolor}
               background={backgroundcolor}
               resolution={resolution}
             />
           </div>
-
           <div className="editor">
             <h2>Editor</h2>
             <div className="resolution">
@@ -108,28 +107,52 @@ export default function Adraw() {
                 />
               </div>
             </div>
-
-            <div className="slider1">
-              <h5>Size Increment</h5>
+            <div className="branch">
+              <h5>Branch Length</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                10
+                0
                 <PrettoSlider
-                  min={10}
-                  max={50}
+                  min={0}
+                  max={120}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={sizef}
-                  onChange={handlesizef}
+                  defaultValue={branchlength}
+                  onChange={(e) => {
+                    setbranchlength(e.target.value);
+                  }}
                 />
-                50
+                120
               </Stack>
             </div>
+            <div className="editrow1">
+              <div className="leafcolor">
+                <h5>Leaf color</h5>
+                <SketchPicker
+                  color={leafcolor.rgb}
+                  onChangeComplete={(color) => {
+                    setleafcolor(color);
+                  }}
+                />
+              </div>
+              <div className="backgroundcolor">
+                <h5>Background color</h5>
+                <SketchPicker
+                  color={backgroundcolor.rgb}
+                  onChangeComplete={(color) => {
+                    setbackgroundcolor(color);
+                  }}
+                  triangle={"hide"}
+                />
+              </div>
+            </div>
 
-            <div className="colorpicker">
-              <h5>Background Color</h5>
-              <SwatchesPicker
-                color={backgroundcolor.rgb}
-                onChangeComplete={handlebackgroundcolor}
+            <div className="trunkcolor">
+              <h5>Trunk color</h5>
+              <CirclePicker
+                color={trunkcolor.rgb}
+                onChangeComplete={(color) => {
+                  settrunkcolor(color);
+                }}
               />
             </div>
           </div>
@@ -138,7 +161,7 @@ export default function Adraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/ASCIIFabric`
+            `https://suwubham.github.io/template/recursivetree`
           );
           alert("Copied to clipboard");
         }}

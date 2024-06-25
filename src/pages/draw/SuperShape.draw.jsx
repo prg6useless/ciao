@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Grid from "../../components/art/Grid";
+import Supershape from "../../components/art/SuperShape";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,21 +9,24 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
 export default function Rdraw() {
-  const [boldness, setboldness] = useState(30);
-
-  const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 26, g: 26, b: 26 },
-  });
+  const [increment2d, setincrement2d] = useState(3);
+  const [bold2d, setbold2d] = useState(3);
   const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 0, g: 19, b: 20 },
+    rgb: { r: 25, g: 194, b: 209 },
+  });
+  const [backgroundcolor, setbackgroundcolor] = useState({
+    rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handleboldness = (e) => {
-    setboldness(e.target.value);
+  const handleincrement2d = (e) => {
+    setincrement2d(e.target.value);
+  };
+  const handlebold2d = (e) => {
+    setbold2d(e.target.value);
   };
   const handlebordercolor = (color) => {
     setbordercolor(color);
@@ -32,12 +35,14 @@ export default function Rdraw() {
     setbackgroundcolor(color);
   };
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
+
   const save = async () => {
     let data = {
-      boldness,
+      increment2d,
+      bold2d,
       bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 13,
+      id: 16,
       resolution,
     };
     try {
@@ -48,11 +53,12 @@ export default function Rdraw() {
       console.log(err);
     }
   };
+
   return (
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Grid</h1>
+        <h1 className="header-title">SUPERSHAPE</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -60,20 +66,24 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              This design is grid-based. In this template, the items have been
-              positioned in the grid's middle. In addition to adding a
-              strokeweight of a border slider, we also introduced border
-              dominant color and grid dominant color so that the user can work
-              with different color schemes and resolutions for the sketch in
-              accordance with their preferences.
+              Supershape simulates amazing shapes in a two-dimensional plane
+              using a visual representation of a certain type of parametric
+              equation. In accordance with a specific value of u, we simulated a
+              supershape. The fundamental concept is that we operate with a
+              function that receives an angle and returns a value, and we do
+              this for each circle. We get the shape altering on the fly by
+              employing a variety of functions. With the help of the backdrop
+              and border colors, we may change the supershape's boldness and
+              size.
             </span>
           </nav>
           <div className="main-art">
-            <Grid
-              bold={boldness}
+            <Supershape
+              increment={increment2d}
+              bold={bold2d}
+              border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
-              border={bordercolor}
             />
           </div>
           <div className="editor">
@@ -112,29 +122,44 @@ export default function Rdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>StrokeWeight of Border</h5>
+              <h5>Increment</h5>
               <Stack direction="row" alignItems="center" className="slider">
                 0
                 <PrettoSlider
                   min={0}
-                  max={30}
+                  max={10}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={boldness}
-                  onChange={handleboldness}
+                  value={increment2d}
+                  onChange={handleincrement2d}
                 />
-                30
+                10
+              </Stack>
+            </div>
+            <div className="slider1">
+              <h5>BOLDNESS OF BORDER</h5>
+              <Stack direction="row" alignItems="center" className="slider">
+                0
+                <PrettoSlider
+                  min={0}
+                  max={5}
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  value={bold2d}
+                  onChange={handlebold2d}
+                />
+                5
               </Stack>
             </div>
             <div className="colorpicker">
-              <h5>Border Dominant Color</h5>
+              <h5>Border Color</h5>
               <SwatchesPicker
                 color={bordercolor.rgb}
                 onChangeComplete={handlebordercolor}
               />
             </div>
             <div className="colorpicker">
-              <h5>Grid Dominant Color</h5>
+              <h5>Background Color</h5>
               <SwatchesPicker
                 color={backgroundcolor.rgb}
                 onChangeComplete={handlebackgroundcolor}
@@ -146,7 +171,7 @@ export default function Rdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/Grid`
+            `https://suwubham.github.io/template/supershape2d`
           );
           alert("Copied to clipboard");
         }}

@@ -1,48 +1,47 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Perlintriangle from "../../components/art/PerlinTriangle";
+import Flowerthree from "../../components/art/FlowerThree";
+import { PrettoSlider } from "../../styles/PrettoSlider";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
 import LoggedNavbar from "../../components/Navbar_logged";
-import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
 export default function Rdraw() {
-  const [size2d, setsize2d] = useState(10);
-  const [alpha2d, setalpha2d] = useState(130);
-  const [triangle1color, settriangle1color] = useState({
+  const [increment2d, setincrement2d] = useState(3);
+  const [rotate3d, setrotate3d] = useState(3);
+  const [bordercolor, setbordercolor] = useState({
     rgb: { r: 25, g: 194, b: 209 },
   });
-  const [triangle2color, settriangle2color] = useState({
+  const [backgroundcolor, setbackgroundcolor] = useState({
     rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handlesize2d = (e) => {
-    setsize2d(e.target.value);
+  const handleincrement2d = (e) => {
+    setincrement2d(e.target.value);
   };
-  const handlealpha2d = (e) => {
-    setalpha2d(e.target.value);
+  const handlerotate3d = (e) => {
+    setrotate3d(e.target.value);
   };
-  const handletriangle1color = (color) => {
-    settriangle1color(color);
+  const handlebordercolor = (color) => {
+    setbordercolor(color);
   };
-  const handletriangle2color = (color) => {
-    settriangle2color(color);
+  const handlebackgroundcolor = (color) => {
+    setbackgroundcolor(color);
   };
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
-
   const save = async () => {
     let data = {
-      size2d,
-      alpha2d,
-      triangle1color: { rgb: triangle1color.rgb },
-      triangle2color: { rgb: triangle2color.rgb },
-      id: 17,
+      increment2d,
+      rotate3d,
+      bordercolor: { rgb: bordercolor.rgb },
+      backgroundcolor: { rgb: backgroundcolor.rgb },
+      id: 18,
       resolution,
     };
     try {
@@ -58,7 +57,7 @@ export default function Rdraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">PERLIN TRIANGLE</h1>
+        <h1 className="header-title">FLOWER 3D</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -66,20 +65,22 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              In the Perlin noise triangle, we used a straightforward grid
-              system of logic. Here, triangles are formed using four different
-              sorts of parameters and three different color palettes. While the
-              remaining triangles are colored using the editor's alpha value,
-              the two sorts of triangles can have their colors selected using
-              the color palette.
+              Using the mathematical principles of the polar coordinates system,
+              we have produced a three-dimensional flower pattern. A spiraling
+              flower-like design can be made by altering a circle's radius and
+              phi value. We are able to produce the desired outcome with the
+              help of the ellipse. By first adding trigonometric terms, we alter
+              the flower's radius. The design can be rotated by using the mouse
+              to play around. In a same manner, we may quicken the rotation and
+              change the flower's border and background colors.
             </span>
           </nav>
           <div className="main-art">
-            <Perlintriangle
-              size={size2d}
-              bold={alpha2d}
-              triangle1={triangle1color}
-              triangle2={triangle2color}
+            <Flowerthree
+              increment={increment2d}
+              rotate={rotate3d}
+              border={bordercolor}
+              background={backgroundcolor}
               resolution={resolution}
             />
           </div>
@@ -121,54 +122,55 @@ export default function Rdraw() {
             <div className="slider1">
               <h5>Increment</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                4
+                0
                 <PrettoSlider
-                  min={4}
-                  max={70}
+                  min={0}
+                  max={10}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={size2d}
-                  onChange={handlesize2d}
+                  value={increment2d}
+                  onChange={handleincrement2d}
                 />
-                70
+                10
               </Stack>
             </div>
             <div className="slider1">
-              <h5>ALPHA</h5>
+              <h5>Rotate</h5>
               <Stack direction="row" alignItems="center" className="slider">
                 0
                 <PrettoSlider
                   min={0}
-                  max={250}
+                  max={180}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={alpha2d}
-                  onChange={handlealpha2d}
+                  value={rotate3d}
+                  onChange={handlerotate3d}
                 />
-                250
+                180
               </Stack>
             </div>
             <div className="colorpicker">
-              <h5>Triangle1 Color</h5>
+              <h5>Border Color</h5>
               <SwatchesPicker
-                color={triangle1color.rgb}
-                onChangeComplete={handletriangle1color}
+                color={bordercolor.rgb}
+                onChangeComplete={handlebordercolor}
               />
             </div>
             <div className="colorpicker">
-              <h5>Triangle2 Color</h5>
+              <h5>Background Color</h5>
               <SwatchesPicker
-                color={triangle2color.rgb}
-                onChangeComplete={handletriangle2color}
+                color={backgroundcolor.rgb}
+                onChangeComplete={handlebackgroundcolor}
               />
             </div>
           </div>
         </div>
       </div>
+
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/perlintriangle`
+            `https://suwubham.github.io/template/flowerthree`
           );
           alert("Copied to clipboard");
         }}

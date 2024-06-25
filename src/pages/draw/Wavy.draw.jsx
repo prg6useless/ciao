@@ -9,7 +9,7 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
 export default function Rdraw() {
@@ -69,9 +69,10 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              A wavy pattern is a simple pattern that can be created by rotating a square around its center.
-              The pattern is created by rotating a square around its center. The pattern is created by rotating
-              a square around its center.
+              A wavy pattern is a simple pattern that can be created by rotating
+              a square around its center. The pattern is created by rotating a
+              square around its center. The pattern is created by rotating a
+              square around its center.
             </span>
           </nav>
           <div className="main-art">

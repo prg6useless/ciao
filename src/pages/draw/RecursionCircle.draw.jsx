@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Tenprintline from "../../components/art/Tenprint-line";
+import Recursioncircle from "../../components/art/RecursionCircle";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,24 +9,24 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Tdraw() {
-  const [spacing2d, setspacing2d] = useState(9);
-  const [inclination, setinclination] = useState(5);
+export default function Rdraw() {
+  const [increment2d, setincrement2d] = useState(25);
+  const [boldness, setboldness] = useState(90);
   const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 25, g: 194, b: 209 },
+    rgb: { r: 257, g: 16, b: 100 },
   });
   const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 255, g: 194, b: 209 },
+    rgb: { r: 26, g: 26, b: 26 },
   });
 
-  const handlespacing2d = (e) => {
-    setspacing2d(e.target.value);
+  const handleincrement2d = (e) => {
+    setincrement2d(e.target.value);
   };
-  const handleinclination = (e) => {
-    setinclination(e.target.value);
+  const handleboldness = (e) => {
+    setboldness(e.target.value);
   };
   const handlebordercolor = (color) => {
     setbordercolor(color);
@@ -38,11 +38,11 @@ export default function Tdraw() {
 
   const save = async () => {
     let data = {
-      spacing2d,
-      inclination,
+      increment2d,
+      boldness,
       bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 6,
+      id: 8,
       resolution,
     };
     try {
@@ -58,7 +58,7 @@ export default function Tdraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Ten Print Line</h1>
+        <h1 className="header-title">Recurssion Circle</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -66,19 +66,20 @@ export default function Tdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              The use of the if else statement to construct forward and backward
-              slashes results in the creation of an interesting maze pattern. To
-              print 10 lines in horizontal order, we utilized a universal
-              variable and a random variable. Additionally, we have added
-              certain editors, such as spacing, and we have the ability to
-              change the inclination from extreme right to extreme left. We can
-              experiment with background and border colors as well.
+              The idea of recursion involves self-reference.A recursive function
+              is defined within itself. It is a simple method of generating an
+              art form, or a pattern. In a recursive circle, we start with a
+              single circle, and as the number of iterations rises, a new circle
+              is generated on it from three different angles. It is merely the
+              fundamental idea of recursion. We now have iteration and the
+              ability to increase and decrease the boldness of the border. We
+              can alter the background and border colors similarly.
             </span>
           </nav>
           <div className="main-art">
-            <Tenprintline
-              space={spacing2d}
-              incline={inclination}
+            <Recursioncircle
+              increment={increment2d}
+              bold={boldness}
               border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
@@ -120,33 +121,33 @@ export default function Tdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>Spacing</h5>
+              <h5>No of iteration</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                6
+                20
                 <PrettoSlider
-                  min={6}
-                  max={20}
+                  min={20}
+                  max={50}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={spacing2d}
-                  onChange={handlespacing2d}
+                  value={increment2d}
+                  onChange={handleincrement2d}
                 />
-                20
+                50
               </Stack>
             </div>
             <div className="slider1">
-              <h5>Inclination Shift</h5>
+              <h5>StrokeWeight of Border</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                left
+                50
                 <PrettoSlider
-                  min={1}
-                  max={10}
+                  min={50}
+                  max={150}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={inclination}
-                  onChange={handleinclination}
+                  value={boldness}
+                  onChange={handleboldness}
                 />
-                Right
+                150
               </Stack>
             </div>
             <div className="colorpicker">
@@ -169,7 +170,7 @@ export default function Tdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/Tenprint`
+            `https://suwubham.github.io/template/recursioncircle`
           );
           alert("Copied to clipboard");
         }}

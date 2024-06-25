@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import PerlinNoiseRandomness from "../../components/art/PerlinNoiseRandomness";
+import Tenprintcircle from "../../components/art/TenprintCircle";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,28 +9,24 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Pdraw() {
-  const [increment2d, setincrement2d] = useState(3);
-  const [bold2d, setbold2d] = useState(9);
-  const [sizef, setsizef] = useState(15);
+export default function Tdraw() {
+  const [spacing2d, setspacing2d] = useState(10);
+  const [incrementc, setincrementc] = useState(5);
   const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 25, g: 19, b: 209 },
+    rgb: { r: 25, g: 194, b: 209 },
   });
   const [backgroundcolor, setbackgroundcolor] = useState({
     rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handleincrement2d = (e) => {
-    setincrement2d(e.target.value);
+  const handlespacing2d = (e) => {
+    setspacing2d(e.target.value);
   };
-  const handlebold2d = (e) => {
-    setbold2d(e.target.value);
-  };
-  const handlesizef = (e) => {
-    setsizef(e.target.value);
+  const handleincrementc = (e) => {
+    setincrementc(e.target.value);
   };
   const handlebordercolor = (color) => {
     setbordercolor(color);
@@ -42,12 +38,11 @@ export default function Pdraw() {
 
   const save = async () => {
     let data = {
-      increment2d,
-      bold2d,
-      sizef,
+      spacing2d,
+      incrementc,
       bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 12,
+      id: 7,
       resolution,
     };
     try {
@@ -58,11 +53,12 @@ export default function Pdraw() {
       console.log(err);
     }
   };
+
   return (
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Perlin Noise Randomness</h1>
+        <h1 className="header-title">Ten Print Line</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -70,21 +66,17 @@ export default function Pdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              Perlin noise, a particular variety of gradient noise, can be used
-              to produce randomness that is "smooth" in one or more dimensions.
-              Here, we've merely added some noise and created a rectangle and
-              added greyscale value in every cell of the artwork where
-              randomness is created and moved at random across the canvas. We
-              can change the boldness of the border, the size increase, and the
-              speed increment of the randomly generated lines. The color of the
-              background and border can also be changed.
+              Circles that do not overlap one another completely cover the
+              canvas. Even the circle's size and its frequency in the data can
+              be increased. Aside from changing the backdrop color and the
+              circle's color, we can also change the canvas's size by adjusting
+              the resolution.
             </span>
           </nav>
           <div className="main-art">
-            <PerlinNoiseRandomness
-              increment={increment2d}
-              bold={bold2d}
-              size={sizef}
+            <Tenprintcircle
+              space={spacing2d}
+              increment={incrementc}
               border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
@@ -126,52 +118,37 @@ export default function Pdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>Speed Increment</h5>
+              <h5>Size Increment</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                3
+                5
                 <PrettoSlider
-                  min={3}
-                  max={10}
+                  min={5}
+                  max={30}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={increment2d}
-                  onChange={handleincrement2d}
+                  value={spacing2d}
+                  onChange={handlespacing2d}
                 />
-                10
+                30
               </Stack>
             </div>
             <div className="slider1">
-              <h5>Boldness Of Border</h5>
+              <h5>Percentage of occurence of Cicle</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                2
+                Less
                 <PrettoSlider
-                  min={2}
+                  min={4}
                   max={7}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={bold2d}
-                  onChange={handlebold2d}
+                  value={incrementc}
+                  onChange={handleincrementc}
                 />
-                7
-              </Stack>
-            </div>
-            <div className="slider1">
-              <h5>Size Increment</h5>
-              <Stack direction="row" alignItems="center" className="slider">
-                15
-                <PrettoSlider
-                  min={15}
-                  max={50}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  value={sizef}
-                  onChange={handlesizef}
-                />
-                50
+                More
               </Stack>
             </div>
             <div className="colorpicker">
-              <h5>Border Color</h5>
+              <h5>Color Of Circle</h5>
               <SwatchesPicker
                 color={bordercolor.rgb}
                 onChangeComplete={handlebordercolor}
@@ -190,7 +167,7 @@ export default function Pdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/pnrandom`
+            `https://suwubham.github.io/template/tenprintcircle`
           );
           alert("Copied to clipboard");
         }}

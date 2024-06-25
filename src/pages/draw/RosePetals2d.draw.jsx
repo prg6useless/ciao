@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Rotatedbox from "../../components/art/RotatedBox";
+import Rosepetals2d from "../../components/art/RosePetals2d";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,27 +9,23 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Rbox() {
-  const [increment2d, setincrement2d] = useState(25);
-  const [boldness, setboldness] = useState(2);
-  const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 257, g: 16, b: 100 },
+export default function Rdraw() {
+  const [dflower2d, setdflower2d] = useState(3);
+  const [flowercolor2d, setflowercolor2d] = useState({
+    rgb: { r: 25, g: 194, b: 209 },
   });
   const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 26, g: 26, b: 26 },
+    rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handleincrement2d = (e) => {
-    setincrement2d(e.target.value);
+  const handledflower2d = (e) => {
+    setdflower2d(e.target.value);
   };
-  const handleboldness = (e) => {
-    setboldness(e.target.value);
-  };
-  const handlebordercolor = (color) => {
-    setbordercolor(color);
+  const handleflowercolor2d = (color) => {
+    setflowercolor2d(color);
   };
   const handlebackgroundcolor = (color) => {
     setbackgroundcolor(color);
@@ -38,11 +34,10 @@ export default function Rbox() {
 
   const save = async () => {
     let data = {
-      increment2d,
-      boldness,
-      bordercolor: { rgb: bordercolor.rgb },
+      dflower2d,
+      flowercolor2d,
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 9,
+      id: 15,
       resolution,
     };
     try {
@@ -58,7 +53,7 @@ export default function Rbox() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Rotated Box</h1>
+        <h1 className="header-title">ROSE PETALS 2D</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -66,19 +61,20 @@ export default function Rbox() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              The rectangles can also be turned around and positioned at a
-              45-degree angle. As a result of different types of rectangles
-              covering one another, an intriguing work of art results. We can
-              alter both the dominant and background colors. The line's stroke
-              and the rectangle's size can both be increased in a similar
-              manner.
+              A rose petel curve is a sinusoid with no phase angle that is
+              determined by either the sine or cosine functions and shown in
+              polar coordinates. The complexity of the petal decreses as the
+              editor is shifted to the extreme left, while the complexity
+              increases when shifted to the extreme right. We have also included
+              a resolution feature, which enables the canvas's size to be
+              adjusted as well as the background and border colors to be
+              changed.
             </span>
           </nav>
           <div className="main-art">
-            <Rotatedbox
-              increment={increment2d}
-              bold={boldness}
-              border={bordercolor}
+            <Rosepetals2d
+              dflower={dflower2d}
+              flowercolor={flowercolor2d}
               background={backgroundcolor}
               resolution={resolution}
             />
@@ -119,40 +115,25 @@ export default function Rbox() {
               </div>
             </div>
             <div className="slider1">
-              <h5>Increment in Size</h5>
+              <h5>Value of d in k=n/d</h5>
               <Stack direction="row" alignItems="center" className="slider">
+                0
+                <PrettoSlider
+                  min={0}
+                  max={10}
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  value={dflower2d}
+                  onChange={handledflower2d}
+                />
                 10
-                <PrettoSlider
-                  min={10}
-                  max={60}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  value={increment2d}
-                  onChange={handleincrement2d}
-                />
-                60
-              </Stack>
-            </div>
-            <div className="slider1">
-              <h5>StrokeWeight of Border</h5>
-              <Stack direction="row" alignItems="center" className="slider">
-                1
-                <PrettoSlider
-                  min={1}
-                  max={5}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  value={boldness}
-                  onChange={handleboldness}
-                />
-                5
               </Stack>
             </div>
             <div className="colorpicker">
-              <h5>Dominant Color</h5>
+              <h5>Border Color</h5>
               <SwatchesPicker
-                color={bordercolor.rgb}
-                onChangeComplete={handlebordercolor}
+                color={flowercolor2d.rgb}
+                onChangeComplete={handleflowercolor2d}
               />
             </div>
             <div className="colorpicker">
@@ -168,7 +149,7 @@ export default function Rbox() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/rotatedbox`
+            `https://suwubham.github.io/template/rosepetals2d`
           );
           alert("Copied to clipboard");
         }}

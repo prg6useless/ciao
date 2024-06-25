@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Drawsnowflake from "../../components/art/DrawSnowflake";
+import Grid from "../../components/art/Grid";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,24 +9,21 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
 export default function Rdraw() {
-  const [symmetry2d, setsymmetry2d] = useState(70);
-  const [bold2d, setbold2d] = useState(10);
-  const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 25, g: 194, b: 209 },
-  });
+  const [boldness, setboldness] = useState(30);
+
   const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 255, g: 194, b: 209 },
+    rgb: { r: 26, g: 26, b: 26 },
+  });
+  const [bordercolor, setbordercolor] = useState({
+    rgb: { r: 0, g: 19, b: 20 },
   });
 
-  const handlesymmetry2d = (e) => {
-    setsymmetry2d(e.target.value);
-  };
-  const handlebold2d = (e) => {
-    setbold2d(e.target.value);
+  const handleboldness = (e) => {
+    setboldness(e.target.value);
   };
   const handlebordercolor = (color) => {
     setbordercolor(color);
@@ -37,11 +34,10 @@ export default function Rdraw() {
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
   const save = async () => {
     let data = {
-      symmetry2d,
-      bold2d,
+      boldness,
       bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 19,
+      id: 13,
       resolution,
     };
     try {
@@ -52,12 +48,11 @@ export default function Rdraw() {
       console.log(err);
     }
   };
-
   return (
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">SUPERSHAPE</h1>
+        <h1 className="header-title">Grid</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -65,25 +60,20 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              The fact that this templete is made up of a snowflake design is
-              obvious from the name alone. As we all know, the design of
-              snowflakes is fairly close to a hexagonal pattern, and the
-              placement of triangular forms within the hexagonal pattern
-              provides us the correct representation of snowflakes. With just a
-              brush of the finger, it can also produce stunning designs.
-              Snowflakes develops a significant concept of how basic input can
-              be instantaneously transformed into far more intricate,
-              complicated, and advanced forms by using simple guidelines like
-              having symmetrical mirroring of the lines.
+              This design is grid-based. In this template, the items have been
+              positioned in the grid's middle. In addition to adding a
+              strokeweight of a border slider, we also introduced border
+              dominant color and grid dominant color so that the user can work
+              with different color schemes and resolutions for the sketch in
+              accordance with their preferences.
             </span>
           </nav>
           <div className="main-art">
-            <Drawsnowflake
-              symmetry={symmetry2d}
-              bold={bold2d}
-              border={bordercolor}
+            <Grid
+              bold={boldness}
               background={backgroundcolor}
               resolution={resolution}
+              border={bordercolor}
             />
           </div>
           <div className="editor">
@@ -122,44 +112,29 @@ export default function Rdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>symmetry</h5>
-              <Stack direction="row" alignItems="center" className="slider">
-                4
-                <PrettoSlider
-                  min={4}
-                  max={100}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  value={symmetry2d}
-                  onChange={handlesymmetry2d}
-                />
-                100
-              </Stack>
-            </div>
-            <div className="slider1">
-              <h5>BOLDNESS OF BORDER</h5>
+              <h5>StrokeWeight of Border</h5>
               <Stack direction="row" alignItems="center" className="slider">
                 0
                 <PrettoSlider
-                  min={2}
-                  max={20}
+                  min={0}
+                  max={30}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={bold2d}
-                  onChange={handlebold2d}
+                  value={boldness}
+                  onChange={handleboldness}
                 />
-                5
+                30
               </Stack>
             </div>
             <div className="colorpicker">
-              <h5>Border Color</h5>
+              <h5>Border Dominant Color</h5>
               <SwatchesPicker
                 color={bordercolor.rgb}
                 onChangeComplete={handlebordercolor}
               />
             </div>
             <div className="colorpicker">
-              <h5>Background Color</h5>
+              <h5>Grid Dominant Color</h5>
               <SwatchesPicker
                 color={backgroundcolor.rgb}
                 onChangeComplete={handlebackgroundcolor}
@@ -168,11 +143,10 @@ export default function Rdraw() {
           </div>
         </div>
       </div>
-
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/drawsnowflake`
+            `https://suwubham.github.io/template/Grid`
           );
           alert("Copied to clipboard");
         }}

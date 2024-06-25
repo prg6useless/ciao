@@ -1,55 +1,48 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Perlin from "../../components/art/PerlinNoiseFlowField";
+import Tenprintline from "../../components/art/Tenprint-line";
+import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
 import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { SwatchesPicker } from "react-color";
-import { SketchPicker } from "react-color";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Pdraw() {
-  const [increment2d, setincrement2d] = useState(20);
-  const [bold2d, setbold2d] = useState(2);
-  const [layers, setlayers] = useState(10);
-  const [backgroundcolor, setbackgroundcolor] = useState({
-    rgb: { r: 0, g: 19, b: 20 },
+export default function Tdraw() {
+  const [spacing2d, setspacing2d] = useState(9);
+  const [inclination, setinclination] = useState(5);
+  const [bordercolor, setbordercolor] = useState({
+    rgb: { r: 25, g: 194, b: 209 },
   });
-  const [strokecolor, setstrokecolor] = useState({
-    rgb: { r: 160, g: 19, b: 20 },
+  const [backgroundcolor, setbackgroundcolor] = useState({
+    rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handleincrement2d = (e) => {
-    setincrement2d(e.target.value);
+  const handlespacing2d = (e) => {
+    setspacing2d(e.target.value);
   };
-  const handlebold2d = (e) => {
-    setbold2d(e.target.value);
+  const handleinclination = (e) => {
+    setinclination(e.target.value);
   };
-  const handlelayers = (e) => {
-    setlayers(e.target.value);
+  const handlebordercolor = (color) => {
+    setbordercolor(color);
   };
   const handlebackgroundcolor = (color) => {
     setbackgroundcolor(color);
   };
-  const handlestrokecolor = (color) => {
-    setstrokecolor(color);
-  };
-
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
 
   const save = async () => {
     let data = {
-      increment2d,
-      bold2d,
-      layers,
+      spacing2d,
+      inclination,
+      bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      strokecolor: { rgb: strokecolor.rgb },
-      id: 2,
+      id: 6,
       resolution,
     };
     try {
@@ -65,7 +58,7 @@ export default function Pdraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Perlin noise flowfield</h1>
+        <h1 className="header-title">Ten Print Line</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -73,25 +66,22 @@ export default function Pdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              It is possible to create "smooth" randomness in one or more
-              dimensions by using Perlin noise, a type of gradient noise. Flow
-              fields are a traditional creative coding technique that results in
-              strands that appear to be spontaneous on the screen. We modified
-              the vector by changing the lines. We basically produced 3D Perlin
-              noise using a 2D flow field representation. We have included a
-              speed increment editor that allows us to manage the flow field's
-              pace while also allowing us to add more layers to our artwork. It
-              is also possible to change the background's color.
+              The use of the if else statement to construct forward and backward
+              slashes results in the creation of an interesting maze pattern. To
+              print 10 lines in horizontal order, we utilized a universal
+              variable and a random variable. Additionally, we have added
+              certain editors, such as spacing, and we have the ability to
+              change the inclination from extreme right to extreme left. We can
+              experiment with background and border colors as well.
             </span>
           </nav>
           <div className="main-art">
-            <Perlin
-              increment={increment2d}
-              bold={bold2d}
-              layer={layers}
+            <Tenprintline
+              space={spacing2d}
+              incline={inclination}
+              border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
-              stroke={strokecolor}
             />
           </div>
           <div className="editor">
@@ -129,66 +119,49 @@ export default function Pdraw() {
                 />
               </div>
             </div>
-            <div className="editrow1">
-              <div className="backgroundcolor">
-                <h5>Background Color</h5>
-                <SketchPicker
-                  color={backgroundcolor.rgb}
-                  onChangeComplete={handlebackgroundcolor}
+            <div className="slider1">
+              <h5>Spacing</h5>
+              <Stack direction="row" alignItems="center" className="slider">
+                6
+                <PrettoSlider
+                  min={6}
+                  max={20}
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  value={spacing2d}
+                  onChange={handlespacing2d}
                 />
-              </div>
-              <div className="strokecolor">
-                <h5>Stroke Color</h5>
-                <SketchPicker
-                  color={strokecolor.rgb}
-                  onChangeComplete={handlestrokecolor}
-                />
-              </div>
+                20
+              </Stack>
             </div>
             <div className="slider1">
-              <h5>Speed Increment</h5>
+              <h5>Inclination Shift</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                1
+                left
                 <PrettoSlider
                   min={1}
-                  max={30}
+                  max={10}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={increment2d}
-                  onChange={handleincrement2d}
+                  value={inclination}
+                  onChange={handleinclination}
                 />
-                30
+                Right
               </Stack>
             </div>
-            <div className="slider2">
-              <h5>StrokeWeight</h5>
-              <Stack direction="row" alignItems="center" className="slider">
-                1
-                <PrettoSlider
-                  min={1.4}
-                  max={8}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  value={bold2d}
-                  onChange={handlebold2d}
-                />
-                8
-              </Stack>
+            <div className="colorpicker">
+              <h5>Border Color</h5>
+              <SwatchesPicker
+                color={bordercolor.rgb}
+                onChangeComplete={handlebordercolor}
+              />
             </div>
-            <div className="slider3">
-              <h5>Layers Increment</h5>
-              <Stack direction="row" alignItems="center" className="slider">
-                5
-                <PrettoSlider
-                  min={5}
-                  max={50}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  value={layers}
-                  onChange={handlelayers}
-                />
-                50
-              </Stack>
+            <div className="colorpicker">
+              <h5>Background Color</h5>
+              <SwatchesPicker
+                color={backgroundcolor.rgb}
+                onChangeComplete={handlebackgroundcolor}
+              />
             </div>
           </div>
         </div>
@@ -196,7 +169,7 @@ export default function Pdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/perlinnoise`
+            `https://suwubham.github.io/template/Tenprint`
           );
           alert("Copied to clipboard");
         }}

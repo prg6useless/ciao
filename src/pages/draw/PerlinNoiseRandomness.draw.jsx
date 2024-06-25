@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Mandala from "../../components/art/Mandala";
+import PerlinNoiseRandomness from "../../components/art/PerlinNoiseRandomness";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,24 +9,28 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
-export default function Rdraw() {
-  const [alpha, setalpha] = useState(200);
-  const [boldness, setboldness] = useState(0);
+export default function Pdraw() {
+  const [increment2d, setincrement2d] = useState(3);
+  const [bold2d, setbold2d] = useState(9);
+  const [sizef, setsizef] = useState(15);
   const [bordercolor, setbordercolor] = useState({
-    rgb: { r: 25, g: 194, b: 209 },
+    rgb: { r: 25, g: 19, b: 209 },
   });
   const [backgroundcolor, setbackgroundcolor] = useState({
     rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handlealpha = (e) => {
-    setalpha(e.target.value);
+  const handleincrement2d = (e) => {
+    setincrement2d(e.target.value);
   };
-  const handleboldness = (e) => {
-    setboldness(e.target.value);
+  const handlebold2d = (e) => {
+    setbold2d(e.target.value);
+  };
+  const handlesizef = (e) => {
+    setsizef(e.target.value);
   };
   const handlebordercolor = (color) => {
     setbordercolor(color);
@@ -38,11 +42,12 @@ export default function Rdraw() {
 
   const save = async () => {
     let data = {
-      alpha,
-      boldness,
+      increment2d,
+      bold2d,
+      sizef,
       bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 11,
+      id: 12,
       resolution,
     };
     try {
@@ -53,12 +58,11 @@ export default function Rdraw() {
       console.log(err);
     }
   };
-
   return (
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">Mandala</h1>
+        <h1 className="header-title">Perlin Noise Randomness</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -66,19 +70,21 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              Because of random variables, every time we hit an editor, a new
-              design mandala appears that has never existed before or will never
-              appear again. The art becomes transparent when alpha is reduced
-              all the way, yet it remains opaque when alpha is increased. To
-              make the art pop a little bit more, we can also lengthen and
-              shorten the mandala's stroke lines. We can even alter the
-              mandala's border and background colors.
+              Perlin noise, a particular variety of gradient noise, can be used
+              to produce randomness that is "smooth" in one or more dimensions.
+              Here, we've merely added some noise and created a rectangle and
+              added greyscale value in every cell of the artwork where
+              randomness is created and moved at random across the canvas. We
+              can change the boldness of the border, the size increase, and the
+              speed increment of the randomly generated lines. The color of the
+              background and border can also be changed.
             </span>
           </nav>
           <div className="main-art">
-            <Mandala
-              alph={alpha}
-              bold={boldness}
+            <PerlinNoiseRandomness
+              increment={increment2d}
+              bold={bold2d}
+              size={sizef}
               border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
@@ -120,33 +126,48 @@ export default function Rdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>Alpha Value</h5>
+              <h5>Speed Increment</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                50
+                3
                 <PrettoSlider
-                  min={50}
-                  max={250}
+                  min={3}
+                  max={10}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={alpha}
-                  onChange={handlealpha}
+                  value={increment2d}
+                  onChange={handleincrement2d}
                 />
-                250
+                10
               </Stack>
             </div>
             <div className="slider1">
-              <h5>StrokeWeight Of Border</h5>
+              <h5>Boldness Of Border</h5>
               <Stack direction="row" alignItems="center" className="slider">
-                0
+                2
                 <PrettoSlider
-                  min={0}
-                  max={2}
+                  min={2}
+                  max={7}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={boldness}
-                  onChange={handleboldness}
+                  value={bold2d}
+                  onChange={handlebold2d}
                 />
-                2
+                7
+              </Stack>
+            </div>
+            <div className="slider1">
+              <h5>Size Increment</h5>
+              <Stack direction="row" alignItems="center" className="slider">
+                15
+                <PrettoSlider
+                  min={15}
+                  max={50}
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  value={sizef}
+                  onChange={handlesizef}
+                />
+                50
               </Stack>
             </div>
             <div className="colorpicker">
@@ -169,7 +190,7 @@ export default function Rdraw() {
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/Mandala`
+            `https://suwubham.github.io/template/pnrandom`
           );
           alert("Copied to clipboard");
         }}

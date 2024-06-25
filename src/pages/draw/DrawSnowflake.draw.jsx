@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/FromTemplate.css";
 import Navbar from "../../components/Navbar";
-import Rosepetals2d from "../../components/art/RosePetals2d";
+import Drawsnowflake from "../../components/art/DrawSnowflake";
 import { SwatchesPicker } from "react-color";
 import Stack from "@mui/material/Stack";
 import authService from "../../services/auth.service";
@@ -9,35 +9,39 @@ import LoggedNavbar from "../../components/Navbar_logged";
 import { PrettoSlider } from "../../styles/PrettoSlider";
 import saveService from "../../services/save.service";
 import Menu from "../../components/ArtMenu";
-import { ReactComponent as DescriptionIcon } from "../../assets/icons/description.svg";
+import DescriptionIcon from "../../assets/icons/description.svg";
 import TextField from "@mui/material/TextField";
 
 export default function Rdraw() {
-  const [dflower2d, setdflower2d] = useState(3);
-  const [flowercolor2d, setflowercolor2d] = useState({
+  const [symmetry2d, setsymmetry2d] = useState(70);
+  const [bold2d, setbold2d] = useState(10);
+  const [bordercolor, setbordercolor] = useState({
     rgb: { r: 25, g: 194, b: 209 },
   });
   const [backgroundcolor, setbackgroundcolor] = useState({
     rgb: { r: 255, g: 194, b: 209 },
   });
 
-  const handledflower2d = (e) => {
-    setdflower2d(e.target.value);
+  const handlesymmetry2d = (e) => {
+    setsymmetry2d(e.target.value);
   };
-  const handleflowercolor2d = (color) => {
-    setflowercolor2d(color);
+  const handlebold2d = (e) => {
+    setbold2d(e.target.value);
+  };
+  const handlebordercolor = (color) => {
+    setbordercolor(color);
   };
   const handlebackgroundcolor = (color) => {
     setbackgroundcolor(color);
   };
   const [resolution, setresolution] = useState({ x: 900, y: 650 });
-
   const save = async () => {
     let data = {
-      dflower2d,
-      flowercolor2d,
+      symmetry2d,
+      bold2d,
+      bordercolor: { rgb: bordercolor.rgb },
       backgroundcolor: { rgb: backgroundcolor.rgb },
-      id: 15,
+      id: 19,
       resolution,
     };
     try {
@@ -53,7 +57,7 @@ export default function Rdraw() {
     <>
       <div className="containerrrrr">
         {authService.getCurrentUser() ? <LoggedNavbar /> : <Navbar />}
-        <h1 className="header-title">ROSE PETALS 2D</h1>
+        <h1 className="header-title">SUPERSHAPE</h1>
         <div className="main-area">
           <nav className="descriptionbar">
             <div className="logo description-link">
@@ -61,20 +65,23 @@ export default function Rdraw() {
               <DescriptionIcon />
             </div>
             <span className="link-text">
-              A rose petel curve is a sinusoid with no phase angle that is
-              determined by either the sine or cosine functions and shown in
-              polar coordinates. The complexity of the petal decreses as the
-              editor is shifted to the extreme left, while the complexity
-              increases when shifted to the extreme right. We have also included
-              a resolution feature, which enables the canvas's size to be
-              adjusted as well as the background and border colors to be
-              changed.
+              The fact that this templete is made up of a snowflake design is
+              obvious from the name alone. As we all know, the design of
+              snowflakes is fairly close to a hexagonal pattern, and the
+              placement of triangular forms within the hexagonal pattern
+              provides us the correct representation of snowflakes. With just a
+              brush of the finger, it can also produce stunning designs.
+              Snowflakes develops a significant concept of how basic input can
+              be instantaneously transformed into far more intricate,
+              complicated, and advanced forms by using simple guidelines like
+              having symmetrical mirroring of the lines.
             </span>
           </nav>
           <div className="main-art">
-            <Rosepetals2d
-              dflower={dflower2d}
-              flowercolor={flowercolor2d}
+            <Drawsnowflake
+              symmetry={symmetry2d}
+              bold={bold2d}
+              border={bordercolor}
               background={backgroundcolor}
               resolution={resolution}
             />
@@ -115,25 +122,40 @@ export default function Rdraw() {
               </div>
             </div>
             <div className="slider1">
-              <h5>Value of d in k=n/d</h5>
+              <h5>symmetry</h5>
+              <Stack direction="row" alignItems="center" className="slider">
+                4
+                <PrettoSlider
+                  min={4}
+                  max={100}
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  value={symmetry2d}
+                  onChange={handlesymmetry2d}
+                />
+                100
+              </Stack>
+            </div>
+            <div className="slider1">
+              <h5>BOLDNESS OF BORDER</h5>
               <Stack direction="row" alignItems="center" className="slider">
                 0
                 <PrettoSlider
-                  min={0}
-                  max={10}
+                  min={2}
+                  max={20}
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
-                  value={dflower2d}
-                  onChange={handledflower2d}
+                  value={bold2d}
+                  onChange={handlebold2d}
                 />
-                10
+                5
               </Stack>
             </div>
             <div className="colorpicker">
               <h5>Border Color</h5>
               <SwatchesPicker
-                color={flowercolor2d.rgb}
-                onChangeComplete={handleflowercolor2d}
+                color={bordercolor.rgb}
+                onChangeComplete={handlebordercolor}
               />
             </div>
             <div className="colorpicker">
@@ -146,10 +168,11 @@ export default function Rdraw() {
           </div>
         </div>
       </div>
+
       <Menu
         share={() => {
           navigator.clipboard.writeText(
-            `https://suwubham.github.io/template/rosepetals2d`
+            `https://suwubham.github.io/template/drawsnowflake`
           );
           alert("Copied to clipboard");
         }}
